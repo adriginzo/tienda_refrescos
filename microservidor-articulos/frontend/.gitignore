@@ -1,0 +1,44 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Angular build output
+/dist/
+/out-tsc/
+/coverage/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.swp
+*.swo
+
+# Generated files
+/angular-cli.json
+angular.json
+package-lock.json
+yarn.lock
+
+# Angular cache
+/.angular/
+
+# Ignore the frontend directory if it's a submodule or unwanted
+# microservidor-articulos/frontend/
+
+# Other optional ignored files
+*.bak
+*.tmp
+*.orig

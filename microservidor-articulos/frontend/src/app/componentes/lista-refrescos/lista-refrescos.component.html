@@ -1,0 +1,239 @@
+<div class="lista-refrescos">
+  <!-- Botón para mostrar/ocultar el formulario de añadir producto -->
+  <button class="btn" (click)="toggleFormulario()">
+    {{ mostrarFormulario ? 'CANCELAR' : 'AÑADIR PRODUCTO' }}
+  </button>
+
+  <!-- Formulario para añadir un nuevo producto -->
+  <div class="menu-formulario" *ngIf="mostrarFormulario">
+    <form (ngSubmit)="agregarRefresco(refrescoForm)" #refrescoForm="ngForm">
+      <!-- Campo Nombre -->
+      <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" [(ngModel)]="nuevoRefresco.nombre" name="nombre" required>
+        <div *ngIf="submitted && refrescoForm.controls['nombre']?.invalid" class="error-message">
+          El nombre es obligatorio.
+        </div>
+      </div>
+
+      <!-- Campo Marca -->
+      <div class="form-group">
+        <label for="marca">Marca:</label>
+        <input type="text" id="marca" [(ngModel)]="nuevoRefresco.marca" name="marca" required>
+        <div *ngIf="submitted && refrescoForm.controls['marca']?.invalid" class="error-message">
+          La marca es obligatoria.
+        </div>
+      </div>
+
+      <!-- Campo Sabor -->
+      <div class="form-group">
+        <label for="sabor">Sabor:</label>
+        <input type="text" id="sabor" [(ngModel)]="nuevoRefresco.sabor" name="sabor" required>
+        <div *ngIf="submitted && refrescoForm.controls['sabor']?.invalid" class="error-message">
+          El sabor es obligatorio.
+        </div>
+      </div>
+
+      <!-- Campo Volumen -->
+      <div class="form-group">
+        <label for="volumen">Volumen (ml):</label>
+        <input type="number" id="volumen" [(ngModel)]="nuevoRefresco.volumen" name="volumen" required min="0">
+        <div *ngIf="submitted && refrescoForm.controls['volumen']?.invalid" class="error-message">
+          <span *ngIf="refrescoForm.controls['volumen']?.errors?.['required']">El volumen es obligatorio.</span>
+          <span *ngIf="refrescoForm.controls['volumen']?.errors?.['min']">El volumen no puede ser negativo.</span>
+        </div>
+      </div>
+
+      <!-- Campo Tipo de Envase -->
+      <div class="form-group">
+        <label for="tipoEnvase">Tipo de envase:</label>
+        <select id="tipoEnvase" [(ngModel)]="nuevoRefresco.tipoEnvase" name="tipoEnvase" required>
+          <option value="lata">Lata</option>
+          <option value="botella">Botella</option>
+          <option value="vidrio">Vidrio</option>
+        </select>
+        <div *ngIf="submitted && refrescoForm.controls['tipoEnvase']?.invalid" class="error-message">
+          El tipo de envase es obligatorio.
+        </div>
+      </div>
+
+      <!-- Campo Cantidad -->
+      <div class="form-group">
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" [(ngModel)]="nuevoRefresco.cantidad" name="cantidad" required min="0">
+        <div *ngIf="submitted && refrescoForm.controls['cantidad']?.invalid" class="error-message">
+          <span *ngIf="refrescoForm.controls['cantidad']?.errors?.['required']">La cantidad es obligatoria.</span>
+          <span *ngIf="refrescoForm.controls['cantidad']?.errors?.['min']">La cantidad no puede ser negativa.</span>
+        </div>
+      </div>
+
+      <!-- Campo Precio -->
+      <div class="form-group">
+        <label for="precio">Precio (€):</label>
+        <input type="number" id="precio" [(ngModel)]="nuevoRefresco.precio" name="precio" required min="0">
+        <div *ngIf="submitted && refrescoForm.controls['precio']?.invalid" class="error-message">
+          <span *ngIf="refrescoForm.controls['precio']?.errors?.['required']">El precio es obligatorio.</span>
+          <span *ngIf="refrescoForm.controls['precio']?.errors?.['min']">El precio no puede ser negativo.</span>
+        </div>
+      </div>
+
+      <!-- Botón de enviar -->
+      <button type="submit" class="btn">AGREGAR</button>
+    </form>
+  </div>
+
+  <!-- Botón para mostrar/ocultar el buscador por ID -->
+  <button class="btn btn-buscar" (click)="toggleBuscador()">
+    {{ mostrarBuscador ? 'CANCELAR BÚSQUEDA' : 'BUSCAR REFRESCO' }}
+  </button>
+
+  <!-- Campo de búsqueda por ID -->
+  <div class="buscador-container" *ngIf="mostrarBuscador">
+    <input
+      type="text"
+      [(ngModel)]="idBusqueda"
+      placeholder="Buscar por nombre/id"
+      (input)="buscarRefrescoPorId()"
+      class="buscador-input"
+    />
+  </div>
+
+  <!-- Mostrar TODOS los refrescos encontrados por nombre -->
+  <div *ngIf="refrescoEncontrado.length > 0">
+    <div *ngFor="let refresco of refrescoEncontrado" class="producto-card">
+      <div class="producto-info">
+        <h2 class="producto-nombre">{{ refresco.nombre }}</h2>
+        <p class="producto-precio">{{ refresco.precio }} €</p>
+        <p class="producto-cantidad">Cantidad: {{ refresco.cantidad }}</p>
+      </div>
+      <div class="producto-botones">
+        <button class="btn btn-modificar" (click)="mostrarFormularioModificar(refresco)">MODIFICAR</button>
+        <button class="btn btneliminar" (click)="borrarRefresco(refresco._id)">ELIMINAR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje si no se encuentran refrescos -->
+  <p *ngIf="refrescoEncontrado.length === 0 && idBusqueda">
+    No se encontraron refrescos con el criterio de búsqueda.
+  </p>
+
+
+  <!-- Botón para mostrar/ocultar la lista de refrescos -->
+  <button class="btn" (click)="toggleLista()">
+    {{ mostrarLista ? 'OCULTAR CATÁLOGO' : 'VER CATÁLOGO' }}
+  </button>
+
+  <!-- Desplegable para filtrar por tipo de envase -->
+  <div class="filtro-envase" *ngIf="mostrarLista">
+    <label for="filtroEnvase">Filtrar por tipo de envase:</label>
+    <select id="filtroEnvase" [(ngModel)]="filtroEnvase" (change)="filtrarRefrescos()">
+      <option value="">Todos</option>
+      <option value="lata">Lata</option>
+      <option value="botella">Botella</option>
+      <option value="vidrio">Vidrio</option>
+    </select>
+  </div>
+
+  <!-- Lista de refrescos -->
+  <div class="productos-container" *ngIf="mostrarLista">
+    <div class="producto-card" *ngFor="let refresco of refrescosFiltrados">
+      <div class="producto-info">
+        <h2 class="producto-nombre">{{ refresco.nombre }}</h2>
+        <p class="producto-precio">{{ refresco.precio }} €</p>
+        <p class="producto-sabor">Sabor: {{ refresco.sabor }}</p>
+        <p class="producto-cantidad">Cantidad: {{ refresco.cantidad }}</p>
+        <p class="producto-envase">Envase: {{ refresco.tipoEnvase }}</p>
+        <p class="producto-id">ID: {{ refresco._id }}</p>
+      </div>
+      <div class="producto-botones">
+        <!-- Botón Modificar -->
+        <button class="btn btn-modificar" (click)="mostrarFormularioModificar(refresco)">MODIFICAR</button>
+        <button class="btn btneliminar" (click)="borrarRefresco(refresco._id)">ELIMINAR</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Formulario de modificación -->
+  <div class="menu-formulario" *ngIf="mostrarFormularioModificacion">
+    <form (ngSubmit)="modificarRefresco(formModificacion)" #formModificacion="ngForm">
+      <!-- Campo Nombre -->
+      <div class="form-group">
+        <label for="nombreModificar">Nombre:</label>
+        <input type="text" id="nombreModificar" [(ngModel)]="refrescoModificar.nombre" name="nombreModificar" required>
+        <div *ngIf="submittedModificacion && formModificacion.controls['nombreModificar']?.invalid" class="error-message">
+          El nombre es obligatorio.
+        </div>
+      </div>
+
+      <!-- Campo Marca -->
+      <div class="form-group">
+        <label for="marcaModificar">Marca:</label>
+        <input type="text" id="marcaModificar" [(ngModel)]="refrescoModificar.marca" name="marcaModificar" required>
+        <div *ngIf="submittedModificacion && formModificacion.controls['marcaModificar']?.invalid" class="error-message">
+          La marca es obligatoria.
+        </div>
+      </div>
+
+      <!-- Campo Sabor -->
+      <div class="form-group">
+        <label for="saborModificar">Sabor:</label>
+        <input type="text" id="saborModificar" [(ngModel)]="refrescoModificar.sabor" name="saborModificar" required>
+        <div *ngIf="submittedModificacion && formModificacion.controls['saborModificar']?.invalid" class="error-message">
+          El sabor es obligatorio.
+        </div>
+      </div>
+
+      <!-- Campo Volumen -->
+      <div class="form-group">
+        <label for="volumenModificar">Volumen (ml):</label>
+        <input type="number" id="volumenModificar" [(ngModel)]="refrescoModificar.volumen" name="volumenModificar" required min="0">
+        <div *ngIf="submittedModificacion && formModificacion.controls['volumenModificar']?.invalid" class="error-message">
+          <span *ngIf="formModificacion.controls['volumenModificar']?.errors?.['required']">El volumen es obligatorio.</span>
+          <span *ngIf="formModificacion.controls['volumenModificar']?.errors?.['min']">El volumen no puede ser negativo.</span>
+        </div>
+      </div>
+
+      <!-- Campo Tipo de Envase -->
+      <div class="form-group">
+        <label for="tipoEnvaseModificar">Tipo de envase:</label>
+        <select id="tipoEnvaseModificar" [(ngModel)]="refrescoModificar.tipoEnvase" name="tipoEnvaseModificar" required>
+          <option value="lata">Lata</option>
+          <option value="botella">Botella</option>
+          <option value="vidrio">Vidrio</option>
+        </select>
+        <div *ngIf="submittedModificacion && formModificacion.controls['tipoEnvaseModificar']?.invalid" class="error-message">
+          El tipo de envase es obligatorio.
+        </div>
+      </div>
+
+      <!-- Campo Cantidad -->
+      <div class="form-group">
+        <label for="cantidadModificar">Cantidad:</label>
+        <input type="number" id="cantidadModificar" [(ngModel)]="refrescoModificar.cantidad" name="cantidadModificar" required min="0">
+        <div *ngIf="submittedModificacion && formModificacion.controls['cantidadModificar']?.invalid" class="error-message">
+          <span *ngIf="formModificacion.controls['cantidadModificar']?.errors?.['required']">La cantidad es obligatoria.</span>
+          <span *ngIf="formModificacion.controls['cantidadModificar']?.errors?.['min']">La cantidad no puede ser negativa.</span>
+        </div>
+      </div>
+
+      <!-- Campo Precio -->
+      <div class="form-group">
+        <label for="precioModificar">Precio (€):</label>
+        <input type="number" id="precioModificar" [(ngModel)]="refrescoModificar.precio" name="precioModificar" required min="0">
+        <div *ngIf="submittedModificacion && formModificacion.controls['precioModificar']?.invalid" class="error-message">
+          <span *ngIf="formModificacion.controls['precioModificar']?.errors?.['required']">El precio es obligatorio.</span>
+          <span *ngIf="formModificacion.controls['precioModificar']?.errors?.['min']">El precio no puede ser negativo.</span>
+        </div>
+      </div>
+
+      <!-- Botón de enviar -->
+      <button type="submit" class="btn">GUARDAR CAMBIOS</button>
+      <!-- Botón de cancelar -->
+      <button type="button" class="btn btn-cancelar" (click)="cancelarModificacion()">CANCELAR</button>
+    </form>
+  </div>
+
+
+</div>

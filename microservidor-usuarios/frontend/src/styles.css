@@ -1,0 +1,52 @@
+/* You can add global styles to this file, and also import other style files */
+  /* Botón */
+  .btn {
+    display: inline-block;
+    padding: 16px 32px; /* Más grande */
+    font-size: 1.25rem; /* Tamaño de fuente más grande */
+    font-weight: 500;
+    color: #fff;
+    background-color: #007aff; /* Azul de Apple */
+    border: none;
+    border-radius: 12px; /* Bordes redondeados */
+    cursor: pointer;
+    transition: all 0.3s ease; /* Transición suave */
+    margin-bottom: 20px;
+  }
+  
+  .btn:hover {
+    background-color: #0063cc; /* Azul más oscuro al pasar el ratón */
+    transform: scale(1.05); /* Agrandar el botón */
+  }
+
+
+  .btneliminar {
+    display: inline-block;
+    padding: 16px 32px; /* Más grande */
+    font-size: 1.25rem; /* Tamaño de fuente más grande */
+    font-weight: 500;
+    color: #fff;
+    background-color: #ff0000; /* Azul de Apple */
+    border: none;
+    border-radius: 12px; /* Bordes redondeados */
+    cursor: pointer;
+    transition: all 0.3s ease; /* Transición suave */
+    margin-bottom: 20px;
+  }
+  
+  .btneliminar:hover {
+    background-color: #cc0000; /* Azul más oscuro al pasar el ratón */
+    transform: scale(1.05); /* Agrandar el botón */
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  
+  h1 {
+    text-align: center;
+    margin: 20px 0;
+  }

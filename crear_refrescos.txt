@@ -1,0 +1,11 @@
+curl http://localhost:3000/api/refrescos
+
+
+curl -X POST http://localhost:3000/api/refrescos -H "Content-Type: application/json" -d '{"nombre": "Fanta", "marca": "Coca-Cola", "sabor": "Naranja", "volumen": "50", "tipoEnvase": "botella", "cantidad": 50, "precio": 1.2}'
+
+
+curl -X PUT http://localhost:3000/api/refrescos/:id -H "Content-Type: application/json" -d '{"nombre": "Fanta", "marca": "Coca-Cola", "sabor": "Naranja", "volumen": "50", "tipoEnvase": "botella", "cantidad": 60, "precio": 1.3}'
+
+
+curl -X DELETE http://localhost:3000/api/refrescos/:id
+
