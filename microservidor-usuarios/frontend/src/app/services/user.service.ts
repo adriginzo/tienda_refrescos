@@ -6,13 +6,19 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-
-  private apiUrl = 'http://localhost:3001/api/usuarios';  // Asegúrate de cambiar esta URL si es diferente
+  private apiUrl = 'http://localhost:3001/api/usuarios';
 
   constructor(private http: HttpClient) { }
 
-  // Método para obtener los usuarios
   getUsers(): Observable<any> {
     return this.http.get<any>(this.apiUrl);
+  }
+
+  createUser(userData: { role: string }): Observable<any> {
+    return this.http.post<any>(this.apiUrl, userData);
+  }
+
+  deleteUser(userId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${userId}`);
   }
 }

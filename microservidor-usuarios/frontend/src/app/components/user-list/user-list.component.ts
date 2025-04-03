@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../services/user.service';  // Asegúrate de la ruta correcta
+import { UserService } from '../../services/user.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -11,21 +11,58 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit {
-  users: any[] = [];  // Inicializa la variable 'users' como un array vacío
+  users: any[] = [];
+  showCreateForm = false;
+  showDeleteForm = false;
+  newUser = { role: 'Cliente' }; // Valor por defecto
+  userIdToDelete = '';
 
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.loadUsers();  // Llamada al método para cargar usuarios
+    this.loadUsers();
   }
 
   loadUsers(): void {
     this.userService.getUsers().subscribe(
       (data) => {
-        this.users = data;  // Asigna los datos a 'users' cuando la respuesta sea exitosa
+        this.users = data;
       },
       (error) => {
-        console.error('Error al cargar los usuarios', error);  // Maneja cualquier error
+        console.error('Error al cargar los usuarios', error);
+      }
+    );
+  }
+
+  createUser(): void {
+    this.userService.createUser(this.newUser).subscribe(
+      (response) => {
+        console.log('Usuario creado:', response);
+        this.loadUsers(); // Recargar la lista
+        this.showCreateForm = false; // Ocultar formulario
+        this.newUser = { role: 'Cliente' }; // Resetear formulario
+      },
+      (error) => {
+        console.error('Error al crear usuario:', error);
+      }
+    );
+  }
+
+  deleteUser(): void {
+    if (!this.userIdToDelete) {
+      console.error('No se ha proporcionado un ID de usuario');
+      return;
+    }
+
+    this.userService.deleteUser(this.userIdToDelete).subscribe(
+      () => {
+        console.log('Usuario borrado exitosamente');
+        this.loadUsers(); // Recargar la lista
+        this.showDeleteForm = false; // Ocultar formulario
+        this.userIdToDelete = ''; // Resetear el campo
+      },
+      (error) => {
+        console.error('Error al borrar usuario:', error);
       }
     );
   }

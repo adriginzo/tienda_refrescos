@@ -1,14 +1,51 @@
 <div *ngIf="users && users.length > 0; else noUsers">
-  <!-- Aquí va el contenido que se muestra cuando hay usuarios -->
   <ul>
     <li *ngFor="let user of users">
       <p>ID: {{ user._id }}</p>
-      <p>Email: {{ user.role }}</p> <!-- Asegúrate de que la propiedad 'name' exista en los usuarios -->
+      <p>Role: {{ user.role }}</p>
     </li>
   </ul>
+  
+  <button (click)="showCreateForm = true">CREAR USUARIO</button>
+  <button (click)="showDeleteForm = true">BORRAR USUARIO</button>
+
+  <!-- Formulario para crear usuario -->
+  <div *ngIf="showCreateForm" class="create-user-form">
+    <h3>Crear Nuevo Usuario</h3>
+    <form (ngSubmit)="createUser()">
+      <div class="form-group">
+        <label for="role">Role:</label>
+        <select id="role" [(ngModel)]="newUser.role" name="role" required>
+          <option value="Cliente">Cliente</option>
+          <option value="Administrador">Administrador</option>
+        </select>
+      </div>
+      <button type="submit">CREAR USUARIO</button>
+      <button type="button" (click)="showCreateForm = false">CANCELAR</button>
+    </form>
+  </div>
 </div>
 
+<!-- Formulario para borrar usuario -->
+<div *ngIf="showDeleteForm" class="user-form">
+  <h3>Borrar Usuario</h3>
+  <form (ngSubmit)="deleteUser()">
+    <div class="form-group">
+      <label for="userId">ID del Usuario a borrar:</label>
+      <input 
+        type="text" 
+        id="userId" 
+        [(ngModel)]="userIdToDelete" 
+        name="userId" 
+        required
+        placeholder="Ingresa el ID del usuario">
+    </div>
+    <button type="submit" class="delete-button">BORRAR USUARIO</button>
+    <button type="button" (click)="showDeleteForm = false">CANCELAR</button>
+  </form>
+</div>
+
+
 <ng-template #noUsers>
-  <!-- Aquí se muestra cuando no hay usuarios -->
   <p>No hay usuarios disponibles.</p>
 </ng-template>
