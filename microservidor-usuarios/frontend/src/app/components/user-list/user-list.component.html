@@ -1,1 +1,14 @@
-<p>user-list works!</p>
+<div *ngIf="users && users.length > 0; else noUsers">
+  <!-- Aquí va el contenido que se muestra cuando hay usuarios -->
+  <ul>
+    <li *ngFor="let user of users">
+      <p>ID: {{ user._id }}</p>
+      <p>Email: {{ user.role }}</p> <!-- Asegúrate de que la propiedad 'name' exista en los usuarios -->
+    </li>
+  </ul>
+</div>
+
+<ng-template #noUsers>
+  <!-- Aquí se muestra cuando no hay usuarios -->
+  <p>No hay usuarios disponibles.</p>
+</ng-template>

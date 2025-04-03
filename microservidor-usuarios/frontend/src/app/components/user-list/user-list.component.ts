@@ -1,35 +1,31 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';  // Asegúrate de la ruta correcta
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-user-list',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit {
+  users: any[] = [];  // Inicializa la variable 'users' como un array vacío
 
-  users: any[] = [];  // Array para almacenar los usuarios
-  isLoading: boolean = true;  // Indicador de carga
-  error: string = '';  // Mensaje de error en caso de que ocurra
-
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-   
+    this.loadUsers();  // Llamada al método para cargar usuarios
   }
 
-  
-  getUsers(): void {
+  loadUsers(): void {
     this.userService.getUsers().subscribe(
       (data) => {
-        this.users = data;
-        this.isLoading = false;
+        this.users = data;  // Asigna los datos a 'users' cuando la respuesta sea exitosa
       },
       (error) => {
-        this.error = 'Error al cargar los usuarios';
-        this.isLoading = false;
+        console.error('Error al cargar los usuarios', error);  // Maneja cualquier error
       }
     );
   }

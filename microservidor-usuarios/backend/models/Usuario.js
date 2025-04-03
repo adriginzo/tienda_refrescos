@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const UsuarioSchema = new mongoose.Schema({
-  roll: {
+  role: {
     type: String,
     required: true,
     enum: ['Cliente', 'Administrador'] // Valores permitidos
