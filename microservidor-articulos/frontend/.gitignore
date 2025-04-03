@@ -1,44 +1,42 @@
-# Node.js
-node_modules/
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
 npm-debug.log
 yarn-error.log
 
-# Angular build output
-/dist/
-/out-tsc/
-/coverage/
-
 # IDEs and editors
 .idea/
-.vscode/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
 *.sublime-workspace
-*.sublime-project
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
 
 # System files
 .DS_Store
 Thumbs.db
-
-# Logs
-logs/
-*.log
-
-# Temporary files
-*.swp
-*.swo
-
-# Generated files
-/angular-cli.json
-angular.json
-package-lock.json
-yarn.lock
-
-# Angular cache
-/.angular/
-
-# Ignore the frontend directory if it's a submodule or unwanted
-# microservidor-articulos/frontend/
-
-# Other optional ignored files
-*.bak
-*.tmp
-*.orig
