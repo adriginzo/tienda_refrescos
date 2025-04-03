@@ -1,8 +1,47 @@
 /* Estilos generales */
-.user-management-container {
+body {
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Estilos de autenticación */
+  .auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+  }
+  
+  .auth-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  
+  .auth-title {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-weight: 300;
+  }
+  
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* Estilos del contenido principal */
+  .user-management-container {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
-    background-color: #f5f5f5; /* Fondo gris claro */
+    background-color: #f5f5f5;
     padding: 30px 0;
   }
   
@@ -10,7 +49,7 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background-color: white; /* Contenido blanco sobre fondo gris */
+    background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
@@ -40,6 +79,18 @@
   .btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .btn-auth {
+    background-color: #3498db;
+    color: white;
+    padding: 12px;
+    font-size: 1em;
+    width: 100%;
+  }
+  
+  .btn-auth:hover {
+    background-color: #2980b9;
   }
   
   .btn-create {
@@ -87,7 +138,7 @@
     background-color: #7f8c8d;
   }
   
-  /* Contenedor de botones */
+  /* Contenedores */
   .action-buttons {
     display: flex;
     justify-content: center;
@@ -95,7 +146,6 @@
     gap: 15px;
   }
   
-  /* Grid de usuarios */
   .users-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -115,21 +165,6 @@
   .user-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  }
-  
-  .user-info {
-    line-height: 1.6;
-  }
-  
-  .user-id {
-    font-size: 0.9em;
-    color: #7f8c8d;
-    word-break: break-all;
-  }
-  
-  .user-role {
-    font-size: 1.1em;
-    margin-top: 10px;
   }
   
   /* Formularios */
@@ -189,7 +224,14 @@
     margin-top: 10px;
   }
   
-  /* Estado vacío */
+  /* Mensajes y estados */
+  .error-message {
+    color: #e74c3c;
+    margin-top: 10px;
+    font-size: 0.9em;
+    text-align: center;
+  }
+  
   .empty-state {
     text-align: center;
     padding: 50px 20px;
@@ -206,6 +248,11 @@
   
   /* Responsive */
   @media (max-width: 768px) {
+    .auth-container {
+      padding: 20px;
+      margin: 20px;
+    }
+    
     .user-management-container {
       padding: 15px;
     }

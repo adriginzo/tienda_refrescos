@@ -14,6 +14,10 @@ export class UserService {
     return this.http.get<any>(this.apiUrl);
   }
 
+  getUserById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${id}`);
+  }
+
   createUser(userData: { role: string }): Observable<any> {
     return this.http.post<any>(this.apiUrl, userData);
   }
