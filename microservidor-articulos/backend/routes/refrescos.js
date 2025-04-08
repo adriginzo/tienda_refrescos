@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const RefrescoController = require('../controllers/RefrescoController');
 
+// CRUD Routes usuarios
+router.get('/microservicioU/:id', RefrescoController.getRoleUsuarios);
 
-router.get('/microservicioB/usuarios', RefrescoController.getUsuarios);
-
-// CRUD Routes
+// CRUD Routes refresco
 router.get('/', RefrescoController.getAllRefrescos);
 router.get('/:id', RefrescoController.getRefrescoById);
 router.post('/', RefrescoController.createRefresco);

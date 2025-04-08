@@ -19,6 +19,18 @@ exports.getUsuarioById = async (req, res) => {
   }
 };
 
+
+exports.getRoleUsuariosById = async (req, res) => {
+  try {
+    const usuario = await Usuario.findById(req.params.id).select('role'); // solo selecciona el campo 'role'
+    if (!usuario) return res.status(404).json({ message: 'Usuario no encontrado' });
+    res.status(200).json({ role: usuario.role });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 exports.createUsuario = async (req, res) => {
   const usuario = new Usuario(req.body);
   try {

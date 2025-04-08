@@ -1,14 +1,15 @@
 const Refresco = require('../models/Refresco');
 
-const { obtenerUsuarios } = require('../services/serviciousers');
+const { obtenerRoleUsuarios } = require('../services/serviciousers');
 
-exports.getUsuarios = async (req, res) => {
+exports.getRoleUsuarios = async (req, res) => {
   try {
-    const datos = await obtenerUsuarios();
+    const id = req.params.id;
+    const datos = await obtenerRoleUsuarios(id);
     res.json({ datos });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Error al obtener datos del microservicio B' });
+    res.status(500).json({ error: 'Error al obtener datos del microservicio Usuarios' });
   }
 };
 
