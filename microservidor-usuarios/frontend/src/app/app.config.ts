@@ -10,7 +10,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }), // Configuración de detección de cambios
     provideRouter(routes), // Configuración de rutas
     provideClientHydration(withEventReplay()), // Hidratación del lado del cliente
-    provideHttpClient(withFetch()), // Configura HttpClient para toda la aplicación
+    provideHttpClient(withFetch()), // HABILITA EL FETCH
     
   ]
 };
