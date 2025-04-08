@@ -33,11 +33,51 @@ export class ListaRefrescosComponent implements OnInit {
   };
   submitted: boolean = false; // Variable para controlar si el formulario ha sido enviado
 
+
+  idVerificar: string = '';
+  resultadoVerificacion: string = '';
+
   constructor(private refrescosService: RefrescosService) { }
 
   ngOnInit(): void {
     // No cargamos los refrescos automáticamente al iniciar
   }
+
+
+  // Metodo para verificar ID
+  comprobarRole(roleRequerido: string, idVerificar: string, callback: Function, ...args: any[]) {
+    if (!idVerificar) {
+      this.resultadoVerificacion = 'Por favor ingrese un ID';
+      return;
+    }
+  
+    this.refrescosService.verificarIdExistente(idVerificar).subscribe(
+      (existe: boolean) => {
+        if (existe) {
+          this.refrescosService.obtenerRolePorId(idVerificar).subscribe(
+            (role: string) => {
+              if (role === roleRequerido) {
+                callback(...args); 
+              } else {
+                this.resultadoVerificacion = `El usuario no tiene permisos de ${roleRequerido}`;
+              }
+            },
+            (error) => {
+              this.resultadoVerificacion = 'Error al obtener el rol';
+            }
+          );
+        } else {
+          this.resultadoVerificacion = `El ID ${idVerificar} NO existe.`;
+        }
+      },
+      (error) => {
+        this.resultadoVerificacion = 'Error al verificar el ID';
+      }
+    );
+  }
+
+
+  
 
   // Método para obtener todos los refrescos
   obtenerRefrescos(): void {
@@ -80,7 +120,7 @@ export class ListaRefrescosComponent implements OnInit {
       }
     );
   }
-
+ 
   // Método para alternar la visibilidad del formulario
   toggleFormulario(): void {
     this.mostrarFormulario = !this.mostrarFormulario;

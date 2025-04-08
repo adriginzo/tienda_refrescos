@@ -1,6 +1,25 @@
 <div class="lista-refrescos">
+
+
+   <!-- Nuevo campo de texto para comprobar ID -->
+  <div class="verificacion-id">
+    <input 
+      type="text" 
+      [(ngModel)]="idVerificar" 
+      placeholder="Ingrese ID a verificar" 
+      class="verificar-input"
+    />
+    <!-- <button class="btn btn-verificar" (click)="verificarId()">VERIFICAR ID</button> -->
+    <div *ngIf="resultadoVerificacion" class="resultado-verificacion">
+      {{ resultadoVerificacion }}
+    </div>
+  </div>
+
+
+
+
   <!-- Botón para mostrar/ocultar el formulario de añadir producto -->
-  <button class="btn" (click)="toggleFormulario()">
+  <button class="btn" (click)="comprobarRole('Administrador', idVerificar, toggleFormulario.bind(this))">
     {{ mostrarFormulario ? 'CANCELAR' : 'AÑADIR PRODUCTO' }}
   </button>
 
@@ -83,7 +102,7 @@
   </div>
 
   <!-- Botón para mostrar/ocultar el buscador por ID -->
-  <button class="btn btn-buscar" (click)="toggleBuscador()">
+  <button class="btn btn-buscar" (click)="comprobarRole('Administrador', idVerificar, toggleBuscador.bind(this))">
     {{ mostrarBuscador ? 'CANCELAR BÚSQUEDA' : 'BUSCAR REFRESCO' }}
   </button>
 
@@ -107,8 +126,23 @@
         <p class="producto-cantidad">Cantidad: {{ refresco.cantidad }}</p>
       </div>
       <div class="producto-botones">
-        <button class="btn btn-modificar" (click)="mostrarFormularioModificar(refresco)">MODIFICAR</button>
-        <button class="btn btneliminar" (click)="borrarRefresco(refresco._id)">ELIMINAR</button>
+        <!-- Botón COMPRAR (para Cliente) -->
+        <button class="btn btn-comprar" 
+                (click)="comprobarRole('Cliente', idVerificar, comprarRefresco, refresco)">
+          COMPRAR
+        </button>
+        
+        <!-- Botón MODIFICAR (para Administrador) -->
+        <button class="btn btn-modificar" 
+                (click)="comprobarRole('Administrador', idVerificar, mostrarFormularioModificar, refresco)">
+          MODIFICAR
+        </button>
+        
+        <!-- Botón ELIMINAR (para Administrador) -->
+        <button class="btn btn-eliminar" 
+                (click)="comprobarRole('Administrador', idVerificar, borrarRefresco, refresco._id)">
+          ELIMINAR
+        </button>
       </div>
     </div>
   </div>
@@ -120,7 +154,7 @@
 
 
   <!-- Botón para mostrar/ocultar la lista de refrescos -->
-  <button class="btn" (click)="toggleLista()">
+  <button class="btn" (click)="comprobarRole('Administrador', idVerificar, toggleLista.bind(this))">
     {{ mostrarLista ? 'OCULTAR CATÁLOGO' : 'VER CATÁLOGO' }}
   </button>
 
@@ -147,9 +181,18 @@
         <p class="producto-id">ID: {{ refresco._id }}</p>
       </div>
       <div class="producto-botones">
-        <!-- Botón Modificar -->
-        <button class="btn btn-modificar" (click)="mostrarFormularioModificar(refresco)">MODIFICAR</button>
-        <button class="btn btneliminar" (click)="borrarRefresco(refresco._id)">ELIMINAR</button>
+        
+        <!-- Botón MODIFICAR (para Administrador) -->
+        <button class="btn btn-modificar" 
+                (click)="mostrarFormularioModificar(refresco)">
+          MODIFICAR
+        </button>
+        
+        <!-- Botón ELIMINAR (para Administrador) -->
+        <button class="btn btneliminar" 
+                (click)="borrarRefresco(refresco._id)">
+          ELIMINAR
+        </button>
       </div>
     </div>
   </div>

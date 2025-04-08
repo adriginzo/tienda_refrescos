@@ -42,4 +42,22 @@ export class RefrescosService {
     const url = `${this.apiUrl}/nombre/${nombre}`;
     return this.http.get<any>(url);
   }
+
+
+
+
+
+
+  // Metodo para verificar el ID
+  verificarIdExistente(id: String): Observable<any> {
+    const url = `${this.apiUrl}/microservicioU/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  // Metodo para verificar el ID
+  obtenerRolePorId(id: String): Observable<any> {
+    const url = `${this.apiUrl}/microservicioU/role/${id}`;
+    return this.http.get<any>(url);
+  }
+
 }
