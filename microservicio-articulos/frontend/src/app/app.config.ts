@@ -1,7 +1,7 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideHttpClient } from '@angular/common/http'; // Importa provideHttpClient 
+import { provideHttpClient, withFetch } from '@angular/common/http'; // Importa provideHttpClient 
 
 import { routes } from './app.routes';
 
@@ -10,6 +10,6 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }), // Configuración de detección de cambios
     provideRouter(routes), // Configuración de rutas
     provideClientHydration(withEventReplay()), // Hidratación del lado del cliente
-    provideHttpClient(), // Configura HttpClient para toda la aplicación
+    provideHttpClient(withFetch()), // Configura HttpClient para toda la aplicación
   ]
 };
