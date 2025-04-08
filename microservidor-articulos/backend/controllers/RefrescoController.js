@@ -1,5 +1,17 @@
 const Refresco = require('../models/Refresco');
 
+const { obtenerUsuarios } = require('../services/serviciousers');
+
+exports.getUsuarios = async (req, res) => {
+  try {
+    const datos = await obtenerUsuarios();
+    res.json({ datos });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al obtener datos del microservicio B' });
+  }
+};
+
 exports.getAllRefrescos = async (req, res) => {
   try {
     const refrescos = await Refresco.find();
