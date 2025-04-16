@@ -6,56 +6,80 @@
   padding: 20px;
 }
 
+/* Botones genéricos */
 .btn {
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 8px 12px; /* Tamaño uniforme */
-  border-radius: 5px; /* Bordes redondeados */
+  padding: 8px 12px;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 0.9em; /* Tamaño de fuente uniforme */
-  margin: 5px; /* Espacio entre botones */
-  flex: 1; /* Mismo tamaño para todos los botones */
-  text-align: center; /* Texto centrado */
+  font-size: 0.9em;
+  margin: 5px;
+  flex: 1;
+  text-align: center;
+  transition: background-color 0.2s ease;
 }
 
 .btn:hover {
   background-color: #0056b3;
 }
 
-
-.btn-comprar {
-  background-color: #28a745;
+/* Botón buscar */
+.btn-buscar {
+  background-color: #17a2b8;
 }
 
-.btn-comprar:hover {
-  background-color: #218838;
+.btn-buscar:hover {
+  background-color: #117a8b;
 }
 
-.btn-comprar[disabled] {
-  background-color: #6c757d;
-  cursor: not-allowed;
-}
-
+/* Botón añadir */
 .btn-anadir {
-  background-color: #ffc107;
-  color: black;
+  background-color: #17a2b8;
 }
 
 .btn-anadir:hover {
-  background-color: #e0a800;
+  background-color: #117a8b;
 }
 
-.btneliminar {
-  background-color: #dc3545;
-  color: white;
+/* Botón lista */
+.btn-lista {
+  background-color: #17a2b8;
 }
 
-.btneliminar:hover {
-  background-color: #c82333;
+.btn-lista:hover {
+  background-color: #117a8b;
 }
 
-/* Estilos para el formulario */
+/* Botón eliminar */
+.btn-eliminar {
+  background-color: #c50518;
+}
+
+.btn-eliminar:hover {
+  background-color: #5c010a;
+}
+
+/* Botón modificar */
+.btn-modificar {
+  background-color: #6e47f8;
+}
+
+.btn-modificar:hover {
+  background-color: #471df0;
+}
+
+/* Botón agregar */
+.btn-agregar {
+  background-color: #17a2b8;
+}
+
+.btn-agregar:hover {
+  background-color: #117a8b;
+}
+
+/* Estilos para formularios */
 .menu-formulario {
   margin: 20px 0;
   padding: 20px;
@@ -73,6 +97,7 @@
 .form-group {
   display: flex;
   flex-direction: column;
+  margin-bottom: 15px;
 }
 
 .form-group label {
@@ -88,7 +113,20 @@
   font-size: 1em;
 }
 
-/* Estilos para el buscador */
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Mensajes de error */
+.error-message {
+  color: red;
+  font-size: 0.8em;
+  margin-top: 5px;
+}
+
+/* Buscador */
 .buscador-container {
   margin: 20px 0;
 }
@@ -102,21 +140,14 @@
   max-width: 300px;
 }
 
-.error-message {
-  color: red;
-  font-size: 0.8em;
-  margin-top: 5px;
-}
-
-/* Estilos para las tarjetas de productos */
+/* Tarjetas de productos */
 .productos-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columnas de igual tamaño */
-  gap: 20px; /* Espacio entre productos */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
   margin-top: 20px;
 }
 
-/* Estilos para las tarjetas de productos */
 .producto-card {
   background-color: #fff;
   border: 1px solid #ddd;
@@ -124,7 +155,9 @@
   padding: 15px;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 10px 0; /* Espacio entre tarjetas */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .producto-info {
@@ -142,13 +175,16 @@
   color: #28a745;
 }
 
-.producto-cantidad {
+.producto-cantidad,
+.producto-sabor,
+.producto-envase,
+.producto-id {
   margin: 5px 0;
   font-size: 1em;
   color: #6c757d;
 }
 
-/* Estilos para los botones */
+/* Botones de la tarjeta */
 .producto-botones {
   display: flex;
   justify-content: space-between;
@@ -159,4 +195,57 @@
   flex: 1;
   padding: 8px 12px;
   font-size: 0.9em;
+}
+
+/* Verificación de ID */
+.verificacion-id {
+  margin-bottom: 20px;
+}
+
+.verificar-input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 300px;
+  font-size: 1em;
+}
+
+.lista-refrescos .resultado-verificacion {
+  margin-top: 8px;
+  font-size: 0.9em;
+  color: rgb(167, 6, 6); /* Rojo */
+}
+
+/* Filtro de envase */
+.filtro-envase {
+  margin: 20px 0;
+}
+
+.filtro-envase label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.filtro-envase select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .producto-botones {
+    flex-direction: column;
+  }
+
+  .btn {
+    flex: none;
+    width: 100%;
+  }
+
+  .productos-container {
+    grid-template-columns: 1fr;
+  }
 }

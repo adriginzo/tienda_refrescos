@@ -1,13 +1,156 @@
-<div *ngIf="isLoading">Cargando compras...</div>
-<div *ngIf="error">{{ error }}</div>
+<div class="container">
 
-<ul *ngIf="!isLoading && !error">
-  <li *ngFor="let compra of compras">
-    <p>{{ compra.id_cliente }}</p> 
-    <p>{{ compra.nombre }}</p> 
-    <p>{{ compra.id_articulo }}</p>
-    <p>{{ compra.cantidad }}</p>
-    <p>{{ compra.direccion }}</p>
-  </li>
-</ul>
+  <!-- Sección de verificación de usuario -->
+  <div class="user-verification">
+    <div class="form-group">
+      <label for="idVerificar">ID de Usuario:</label>
+      <input 
+        id="idVerificar" 
+        [(ngModel)]="idVerificar" 
+        placeholder="Ingrese su ID de usuario" 
+        type="text"
+      >
+      <div *ngIf="resultadoVerificacion" class="alert">
+        {{resultadoVerificacion}}
+      </div>
+    </div>
+  </div>
 
+  <!-- Controles principales -->
+  <div class="control-buttons">
+    <button (click)="toggleListaRefrescos()"> {{mostrarRefrescos ? 'Ocultar Lista' : 'Listar Refrescos'}}</button>
+    <button (click)="toggleBuscador()">{{mostrarBuscador ? 'Cancelar Busqueda' : 'Buscar Refresco'}}</button>
+    <button (click)="toggleCompras()">{{ mostrarComprasRealizadas ? 'Ocultar Compras' : 'Ver Mis Compras' }}</button>
+  </div>
+
+  <!-- Lista de refrescos -->
+  <div *ngIf="mostrarRefrescos" class="refrescos-list">
+    <h2>Lista de Refrescos</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Precio</th>
+          <th>Envase</th>
+          <th>Cantidad</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let refresco of refrescos">
+          <td>{{refresco.nombre}}</td>
+          <td>{{refresco.precio}}</td>
+          <td>{{refresco.tipoEnvase}}</td>
+          <td>{{refresco.cantidad}}</td>
+          <td>
+            <button (click)="toggleComprarRefresco(refresco)">Comprar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Buscador de refrescos -->
+  <div class="buscador-container" *ngIf="mostrarBuscador">
+    <input
+      type="text"
+      [(ngModel)]="idBusqueda"
+      placeholder="Buscar por nombre"
+      (input)="buscarRefresco()"
+      class="buscador-input"
+    />
+  </div>
+
+  <!-- Resultados búsqueda -->
+  <div *ngIf="mostrarBuscador && refrescoEncontrado.length > 0" class="refrescos-list">
+    <h2>Resultados de Búsqueda</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Precio</th>
+          <th>Envase</th>
+          <th>Cantidad</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let refresco of refrescoEncontrado">
+          <td>{{refresco.nombre}}</td>
+          <td>{{refresco.precio}}</td>
+          <td>{{refresco.tipoEnvase}}</td>
+          <td>{{refresco.cantidad}}</td>
+          <td>
+            <button (click)="toggleComprarRefresco(refresco)">Comprar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal de confirmación de compra -->
+  <div *ngIf="refrescoAComprar" class="modal-overlay">
+    <div class="modal-compra">
+      <div class="modal-header">
+        <h3>Confirmar compra</h3>
+        <button class="close-btn" (click)="refrescoAComprar = null">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="product-info">
+          <div class="product-image">
+            <span class="icon">🥤</span>
+          </div>
+          <div class="product-details">
+            <h4>{{refrescoAComprar.nombre}}</h4>
+            <p><strong>Precio:</strong> {{refrescoAComprar.precio | currency}}</p>
+            <p><strong>Envase:</strong> {{refrescoAComprar.tipoEnvase}}</p>
+            <p><strong>Disponibles:</strong> {{refrescoAComprar.cantidad}}</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cantidadCompra">Cantidad:</label>
+          <input id="cantidadCompra" [(ngModel)]="cantidadAComprar" type="number" min="1" [max]="refrescoAComprar.cantidad" class="form-input">
+        </div>
+        <div class="form-group">
+          <label for="direccionCompra">Dirección de entrega:</label>
+          <textarea id="direccionCompra" [(ngModel)]="direccionAComprar" rows="3" placeholder="Ingresa tu dirección completa" class="form-textarea"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="refrescoAComprar = null">Cancelar</button>
+        <button class="btn-confirm" (click)="confirmarCompra()"><span class="icon">🛒</span> Confirmar Compra</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Listado de compras realizadas -->
+  <div *ngIf="mostrarComprasRealizadas && comprasRealizadas.length > 0" class="compras-lista">
+    <h2>Compras Realizadas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Artículo</th>
+          <th>Cantidad</th>
+          <th>Dirección</th>
+          <th>Acciones</th> 
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let compra of comprasRealizadas">
+          <td>{{compra.nombre}}</td>
+          <td>{{compra.cantidad}}</td>
+          <td>{{compra.direccion}}</td>
+          <td>
+            <button (click)="eliminarCompra(compra)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="mostrarComprasRealizadas && comprasRealizadas.length === 0">
+    <p>No se han encontrado compras para este usuario.</p>
+  </div>
+
+
+</div>

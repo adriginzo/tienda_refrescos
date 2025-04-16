@@ -10,19 +10,23 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getUsers(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+  obtenerUsuarios(userId: String): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${userId}`);
   }
 
-  getUserById(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`);
+  obtenerUsuariosById(userId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/usuarioID/${userId}`);
   }
 
-  createUser(userData: { role: string }): Observable<any> {
-    return this.http.post<any>(this.apiUrl, userData);
+  createUsuarios(userData: { role: string }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}`, userData);
   }
 
-  deleteUser(userId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${userId}`);
+  deleteUsuarios(userId: string, Id: String): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${userId}/ID/${Id}`);
+  }
+
+  deleteUsuariosActual(IdActual: String): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${IdActual}`);
   }
 }

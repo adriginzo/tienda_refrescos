@@ -1,99 +1,112 @@
-<div class="auth-wrapper" *ngIf="!authenticated; else content">
-  <div class="auth-container">
-    <h2 class="auth-title">Identificación requerida</h2>
-    <form (ngSubmit)="checkUser()" class="auth-form">
-      <div class="form-group">
-        <label for="userId">Ingrese su ID de usuario:</label>
-        <input 
-          type="text" 
-          id="userId" 
-          [(ngModel)]="inputUserId" 
-          name="userId" 
-          required
-          placeholder="Ej: 507f1f77bcf86cd799439011">
-      </div>
-      <button type="submit" class="btn btn-auth">VERIFICAR</button>
-      <div *ngIf="authError" class="error-message">
-        {{ authError }}
-      </div>
-    </form>
-  </div>
-</div>
+<div class="lista-usuarios">
 
-<ng-template #content>
-  <div class="user-management-container">
-    <div class="content-wrapper">
-      <h1 class="management-title">Gestión de Usuarios</h1>
-      
-      <div *ngIf="users && users.length > 0; else noUsers">
-        <div class="action-buttons">
-          <button class="btn btn-create" (click)="showCreateForm = true">
-            CREAR USUARIO
-          </button>
-          <button class="btn btn-delete" (click)="showDeleteForm = true">
-            BORRAR USUARIO
-          </button>
-        </div>
-
-        <div class="users-grid">
-          <div *ngFor="let user of users" class="user-card">
-            <div class="user-info">
-              <p class="user-id"><strong>ID:</strong> {{ user._id }}</p>
-              <p class="user-role"><strong>Role:</strong> {{ user.role }}</p>
-            </div>
-          </div>
-        </div>
-
-        <div *ngIf="showCreateForm" class="management-form">
-          <h3 class="form-title">Nuevo Usuario</h3>
-          <form class="user-form" (ngSubmit)="createUser()">
-            <div class="form-group">
-              <label for="role">Seleccione el rol:</label>
-              <select id="role" [(ngModel)]="newUser.role" name="role" required>
-                <option value="Cliente">Cliente</option>
-                <option value="Administrador">Administrador</option>
-              </select>
-            </div>
-            <div class="form-actions">
-              <button type="submit" class="btn btn-confirm">CREAR</button>
-              <button type="button" class="btn btn-cancel" (click)="showCreateForm = false">
-                CANCELAR
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <div *ngIf="showDeleteForm" class="management-form">
-          <h3 class="form-title">Eliminar Usuario</h3>
-          <form class="user-form" (ngSubmit)="deleteUser()">
-            <div class="form-group">
-              <label for="userId">ID del usuario:</label>
-              <input 
-                type="text" 
-                id="userId" 
-                [(ngModel)]="userIdToDelete" 
-                name="userId" 
-                required
-                placeholder="Ej: 507f1f77bcf86cd799439011">
-            </div>
-            <div class="form-actions">
-              <button type="submit" class="btn btn-delete-confirm">BORRAR</button>
-              <button type="button" class="btn btn-cancel" (click)="showDeleteForm = false">
-                CANCELAR
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <ng-template #noUsers>
-        <div class="empty-state">
-          <p>No hay usuarios disponibles.</p>
-          <button class="btn btn-create" (click)="showCreateForm = true">
-            CREAR PRIMER USUARIO
-          </button>
-        </div>
-      </ng-template>
+  <!-- Verificación de ID -->
+  <div class="verificacion-id">
+    <input 
+      type="text" 
+      [(ngModel)]="idVerificar" 
+      placeholder="Ingrese ID a verificar" 
+      class="verificar-input"
+    />
+    <div *ngIf="resultadoVerificacion" class="resultado-verificacion">
+      {{ resultadoVerificacion }}
     </div>
   </div>
-</ng-template>
+
+  <!-- Botón para mostrar formulario de añadir usuario -->
+  <button class="btn" (click)="toggleFormularioCreacion()">
+    {{ mostrarFormularioCreacion ? 'CANCELAR' : 'CREAR USUARIO' }}
+  </button>
+
+  <!-- Formulario para crear nuevo usuario -->
+  <div class="menu-formulario" *ngIf="mostrarFormularioCreacion">
+    <form (ngSubmit)="crearUsuario()" #formCreacion="ngForm">
+      <!-- Campo Role -->
+      <div class="form-group">
+        <label for="role">Role:</label>
+        <select id="role" [(ngModel)]="nuevoUsuario.role" name="role" required>
+          <option value="Cliente">Cliente</option>
+          <option value="Administrador">Administrador</option>
+        </select>
+        <!-- Mensaje de error si no se selecciona role -->
+        <div *ngIf="submittedCreacion && formCreacion.controls['role']?.errors?.['required']" class="error-message">
+          El rol es obligatorio.
+        </div>
+      </div>
+    
+      <button type="submit" class="btn">CREAR</button>
+    </form>
+
+    <!-- Mensaje de éxito -->
+    <div *ngIf="mensajeExito" class="mensaje-exito">
+      {{ mensajeExito }}
+      <span *ngIf="nuevoUsuarioId">ID: {{ nuevoUsuarioId }}</span>
+    </div>
+
+  </div>
+
+  <!-- Botón para mostrar buscador de usuarios -->
+  <button class="btn" (click)="toggleBuscador()">
+    {{ mostrarBuscador ? 'CANCELAR BÚSQUEDA' : 'BUSCAR USUARIO' }}
+  </button>
+
+  <!-- Buscador por ID -->
+  <div class="buscador-container" *ngIf="mostrarBuscador">
+    <input
+      type="text"
+      [(ngModel)]="idBusqueda"
+      placeholder="Buscar por ID de usuario"
+      (input)="buscarUsuarioPorId()"
+      class="buscador-input"
+    />
+  </div>
+
+  <!-- Resultados de búsqueda -->
+  <div *ngIf="usuarioEncontrado.length > 0">
+    <div *ngFor="let usuario of usuarioEncontrado" class="usuario-card">
+      <div class="usuario-info">
+        <h2 class="usuario-id">ID: {{ usuario._id }}</h2>
+        <p class="usuario-role">Role: {{ usuario.role }}</p>
+      </div>
+      <div class="usuario-botones">
+        <button class="btn btn-eliminar" (click)="borrarUsuario(usuario._id)">ELIMINAR</button>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <!-- Botón para mostrar lista completa -->
+  <button class="btn" (click)="toggleLista()">
+    {{ mostrarLista ? 'OCULTAR LISTA' : 'VER TODOS LOS USUARIOS' }}
+  </button>
+
+  <!-- Filtro por rol -->
+  <div class="filtro-rol" *ngIf="mostrarLista">
+    <label for="filtroRole">Filtrar por role:  </label>
+    <select id="filtroRole" [(ngModel)]="filtroRole" (change)="filtrarUsuarios()">
+      <option value="">Todos</option>
+      <option value="Cliente">Cliente</option>
+      <option value="Administrador">Administrador</option>
+    </select>
+  </div>
+
+  <!-- Lista de usuarios -->
+  <div class="usuarios-container" *ngIf="mostrarLista">
+    <div class="usuario-card" *ngFor="let usuario of usuariosFiltrados">
+      <div class="usuario-info">
+        <p class="usuario-id">ID: {{ usuario._id }} | Role: {{ usuario.role }}</p>
+      </div>
+      <div class="usuario-botones">
+        <button class="btn btn-eliminar" (click)="borrarUsuario(usuario._id)">ELIMINAR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón para eliminar usuario por ID -->
+  <div class="eliminar-usuario">
+    <button class="btn btn-eliminar" (click)="borrarUsuarioActual(idVerificar)"> ELIMINAR USUARIO </button>
+  </div>
+
+
+</div>

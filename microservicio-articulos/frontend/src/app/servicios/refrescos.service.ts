@@ -6,58 +6,41 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class RefrescosService {
-  private apiUrl = 'http://localhost:3000/api/refrescos'; // URL del backend
+  private apiUrl = 'http://localhost:3000/api/refrescos';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  // Método para obtener todos los refrescos
-  obtenerRefrescos(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+  // Refrescos
+  obtenerRefrescos(userId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/usuarioID/${userId}`);
   }
 
-  // Método para borrar un refresco por su ID
-  borrarRefresco(id: string): Observable<any> {
-    const url = `${this.apiUrl}/${id}`; // URL para borrar un refresco específico
-    return this.http.delete(url); // Realiza una solicitud DELETE
+  borrarRefresco(userId: string, refrescoId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/usuarioID/${userId}/refrescoID/${refrescoId}`);
   }
 
-  // Método para agregar un nuevo refresco
-  agregarRefresco(refresco: any): Observable<any> {
-    return this.http.post(this.apiUrl, refresco); // Realiza una solicitud POST
+  agregarRefresco(userId: string, refresco: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/usuarioID/${userId}`, refresco); // Cambio importante aquí
   }
 
-  actualizarRefresco(id: string, datos: any): Observable<any> {
-    const url = `${this.apiUrl}/${id}`; // URL para actualizar un refresco específico
-    return this.http.put(url, datos); // Realiza una solicitud PUT
+  actualizarRefresco(userId: string, refrescoId: string, refrescoActualizado: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/usuarioID/${userId}/refrescoID/${refrescoId}`, refrescoActualizado);
   }
 
-  // Método para buscar un refresco por ID
-  buscarRefrescoPorId(id: string): Observable<any> {
-    const url = `${this.apiUrl}/${id}`; // Endpoint para buscar por ID
-    return this.http.get<any>(url);
+  buscarRefrescoPorId(userId: string, refrescoId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/usuarioID/${userId}/refrescoID/${refrescoId}`);
   }
 
-  // Método para buscar un refresco por nombre
-  buscarRefrescoPorNombre(nombre: string): Observable<any> {
-    const url = `${this.apiUrl}/nombre/${nombre}`;
-    return this.http.get<any>(url);
+  buscarRefrescoPorNombre(userId: string, nombre: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/usuarioID/${userId}/nombre/${nombre}`);
   }
 
-
-
-
-
-
-  // Metodo para verificar el ID
-  verificarIdExistente(id: String): Observable<any> {
-    const url = `${this.apiUrl}/microservicioU/${id}`;
-    return this.http.get<any>(url);
+  // Usuarios (¿Deberían estar en un servicio separado?)
+  verificarUsuario(userId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/microservicioU/usuariosID/${userId}`); // Cambiado a ruta más limpia
   }
 
-  // Metodo para verificar el ID
-  obtenerRolePorId(id: String): Observable<any> {
-    const url = `${this.apiUrl}/microservicioU/role/${id}`;
-    return this.http.get<any>(url);
+  obtenerRoleUsuario(userId: string, Id: String): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/microservicioU/${userId}/role/${Id}`); // Cambiado a ruta más limpia
   }
-
 }

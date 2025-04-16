@@ -7,11 +7,7 @@ const comprasSchema = new mongoose.Schema({
   id_articulo: { type: mongoose.Types.ObjectId, required: true },
   cantidad: { type: Number, required: true },
   direccion: { type: String, required: true },
-});
-
-comprasSchema.set('toJSON', {
-  versionKey: false // elimina __v del output JSON
-});
+}, { versionKey: false }); // Deshabilitar el campo __v
 
 
-module.exports = mongoose.model("Compra", comprasSchema);
+module.exports = mongoose.model('Compra', comprasSchema);

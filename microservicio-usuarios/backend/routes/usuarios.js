@@ -2,14 +2,33 @@ const express = require('express');
 const router = express.Router();
 const UsuarioController = require('../controllers/UsuarioController');
 
-// CRUD Routes usuario
-router.get('/', UsuarioController.getAllUsuarios);
-router.get('/:id', UsuarioController.getUsuarioById);
-router.get('/role/:id', UsuarioController.getRoleUsuariosById);
-router.post('/', UsuarioController.createUsuario);
-router.put('/:id', UsuarioController.updateUsuario);
-router.delete('/:id', UsuarioController.deleteUsuario);
+// Obtener todos los usuarios
+router.get('/:userId', UsuarioController.getAllUsuarios);
 
-// CRUD Routes refrescos 
+// Obtener usuario por ID
+router.get('/usuarioID/:userId', UsuarioController.getUsuarioById);
+
+// Obtener usuario por NOMBRE
+router.get('/:userId/role/:id', UsuarioController.getRoleUsuariosById);
+
+// Crear un nuevo usuario
+router.post('/', UsuarioController.createUsuario);
+
+// Actualizar un usuario
+router.put('/:userId/ID/:Id', UsuarioController.updateUsuario);
+
+// Eliminar un usuario por ID
+router.delete('/:userId/ID/:Id', UsuarioController.deleteUsuario);
+
+// Eliminar usuario actual
+router.delete('/:IdActual', UsuarioController.deleteUsuarioActual);
+
+
+
+
+
+// Obtener usuario por ID
+router.get('/compra/usuarioID/:userId', UsuarioController.getUsuarioByIdCompra);
+
 
 module.exports = router;

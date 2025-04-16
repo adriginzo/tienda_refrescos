@@ -2,23 +2,30 @@ const express = require('express');
 const router = express.Router();
 const compraController = require('../controllers/compraController');
 
-// CRUD Routes usuarios
-router.get('/microservicioU/:id', compraController.getUsuariosID);
-router.get('/microservicioU/role/:id', compraController.getUsuariosRoleByID);
 
-//CRUD Routes Articulos
+// Obtener compas de un userId
+router.get('/:userId/', compraController.getCompraById);
 
-//router.get('microservicioA/cantidad/:id', compraController.get)
-router.get('/microservicioA/:id', compraController.getRefrescos);
+// Crear nueva compra
+router.post('/:userId', compraController.createCompra);
+
+// Modificar una compra
+router.put('/:userId/compraID/:compraId', compraController.updateCompra);
+
+// Eliminar una compra por ID
+router.delete('/:userId/compraID/:compraId', compraController.deleteCompra);
 
 
-// CRUD Routes usuario
-router.get('/', compraController.getAllCompras);
-router.get('/:id', compraController.getCompraById);
-router.post('/', compraController.createCompra);
-router.put('/:id', compraController.updateCompra);
-router.delete('/:id', compraController.deleteCompra);
 
-// CRUD Routes refrescos 
+
+// Obtener todos los refrescos
+router.get('/:userId/refrescos',compraController.getAllRefrescos);
+// Obtener refresco por ID
+router.get('/usuarioID/:userId/refrescoID/:refrescoId', compraController.getRefrescoById);
+// Obtener refresco por NOMBRE
+router.get('/usuarioID/:userId/refrescoNombre/:nombre', compraController.getRefrescoByNombre);
+// Actualizar refresco
+router.put('/usuarioID/:userId/refrescoID/:refrescoId', compraController.updateRefresco);
+
 
 module.exports = router;
