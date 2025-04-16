@@ -4,7 +4,7 @@ This is a MEAN Stack project about a drinks shop.
 
 #STARTING BACKEND
 -> cd ...../backend
--> npm run dev
+-> node server.js
 
 #STARTING FRONTEND
 -> cd ..../frontend
